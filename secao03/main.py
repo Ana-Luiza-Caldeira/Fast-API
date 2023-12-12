@@ -28,10 +28,10 @@ async def get_curso(curso_id: int = Path(..., title='ID do curso', description='
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Curso não encontrado!')
 
 @app.post('/cursos', status_code=status.HTTP_201_CREATED, description='Cria um curso.', summary='Cria um curso', response_model=Curso)
-async def post_curso(curso: Curso,db: Any = Depends(fake_db)):
-    next_id = len(cursos) +1
-    cursos[next_id] = curso
-    del curso.id
+async def post_curso(curso: Curso):
+    next_id: int = len(cursos) + 1
+    curso.id = next_id
+    cursos.append(curso)
     return curso
 
 @app.put('/cursos/{curso_id}', description='Atualiza um curso a partir de um ID, caso seja encontrado.', summary='Atualiza um curso')
